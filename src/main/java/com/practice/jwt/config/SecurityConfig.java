@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 세션을 사용하지 않겠다
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-        .addFilter(corsFilter) // @CrossOrigin(인증x), 인증o - security filter 등록!!
+        .addFilter(corsFilter) // 인증 있을 때 security filter 등록!!
         .formLogin().disable()
         .httpBasic().disable()
         .addFilter(new JwtAuthenticationFilter(authenticationManager()))
