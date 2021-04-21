@@ -1,5 +1,7 @@
 package com.practice.jwt.filter;
 
+import static com.practice.jwt.config.jwt.JwtProperties.HEADER_STRING;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.Filter;
@@ -22,7 +24,7 @@ public class MyFilter3 implements Filter {
 
     if(req.getMethod().equals("POST")) {
       System.out.println("POST 요청됨");
-      String headerAut = req.getHeader("Authorization");
+      String headerAut = req.getHeader(HEADER_STRING);
       System.out.println("필터3");
 
       if(headerAut.equals("cors")){

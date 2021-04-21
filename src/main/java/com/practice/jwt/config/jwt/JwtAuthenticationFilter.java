@@ -1,5 +1,10 @@
 package com.practice.jwt.config.jwt;
 
+import static com.practice.jwt.config.jwt.JwtProperties.EXPIRATION_TIME;
+import static com.practice.jwt.config.jwt.JwtProperties.HEADER_STRING;
+import static com.practice.jwt.config.jwt.JwtProperties.SECRETE;
+import static com.practice.jwt.config.jwt.JwtProperties.TOKEN_PREFIX;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,11 +71,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     String jwtToken = JWT.create()
         .withSubject("yunha token")
-        .withExpiresAt(new Date(System.currentTimeMillis()+ (60000)*10))
+        .withExpiresAt(new Date(System.currentTimeMillis()+ EXPIRATION_TIME))
         .withClaim("id", principalDetails.getUser().getId())
         .withClaim("username", principalDetails.getUser().getUsername())
-        .sign(Algorithm.HMAC512("cos"));
+        .sign(Algorithm.HMAC512(SECRETE));
 
-    response.addHeader("Authorization","Bearer " + jwtToken);
+    response.addHeader(HEADER_STRING,TOKEN_PREFIX + jwtToken);
   }
 }

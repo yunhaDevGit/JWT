@@ -1,5 +1,9 @@
 package com.practice.jwt.config.jwt;
 
+import static com.practice.jwt.config.jwt.JwtProperties.HEADER_STRING;
+import static com.practice.jwt.config.jwt.JwtProperties.SECRETE;
+import static com.practice.jwt.config.jwt.JwtProperties.TOKEN_PREFIX;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.practice.jwt.config.auth.PrincipalDetails;
@@ -31,18 +35,18 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     System.out.println("인증이나 권한이 필요한 주소가 요청이 됨");
 
-    String jwtHeader = request.getHeader("Authorization");
+    String jwtHeader = request.getHeader(HEADER_STRING);
     System.out.println("jwtHeader : " + jwtHeader);
 
-    if(jwtHeader == null || !jwtHeader.startsWith("Bearer")){
+    if(jwtHeader == null || !jwtHeader.startsWith(TOKEN_PREFIX)){
       chain.doFilter(request, response);
       return;
     }
 
-    String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
+    String jwtToken = request.getHeader(HEADER_STRING).replace(TOKEN_PREFIX, "");
 
     String username =
-        JWT.require(Algorithm.HMAC512("cos")).build().verify(jwtToken).getClaim("username").asString();
+        JWT.require(Algorithm.HMAC512(SECRETE)).build().verify(jwtToken).getClaim("username").asString();
 
     if(username!=null) {
       System.out.println("username 정상");
