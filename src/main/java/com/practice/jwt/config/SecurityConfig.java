@@ -18,7 +18,7 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor //
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final CorsFilter corsFilter;
@@ -32,7 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
+    // BasicAuthenticationFilter가 실행되기 전에 MyFilter3를 실행한다
     //http.addFilterBefore(new MyFilter3(), BasicAuthenticationFilter.class);
+    // 만약 직접 정의한 filter가 securityFilterChain을 먼저 실행시키고 싶을 경우
+    // http.addFilterBefore(new MyFilter3(), SecurityContextPersistenceFilter.class);
+    // SecurityContextPersistenceFilter가 securityFilterChain에서 가장 먼저 실행된다.
 
     http.csrf().disable();
 
@@ -40,7 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // (기본적으로 웹은 stateless인데 그걸 statefull처럼 사용하기 위해 session과 cookie를 사용한다 하지만 그 방식을 사용하지 않겠다는 뜻)
     http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-        .addFilter(corsFilter) // 인증 있을 때 security filter에 등록!! (cross origin 정책 사용 x - 모든 요청 허용)
+        .addFilter(corsFilter) // crosorigin 정책 사용 x
+            // 인증 있을 때 security filter에 등록!! (cross origin 정책 사용 x - 모든 요청 허용)
         .formLogin().disable() // formLogin 안쓰겠다 (jwt 방식으로 로그인 하기 때문에 기존에 id, pw 쓸 필요 x)
         .httpBasic().disable() // 기존의 하던 방식과는 다른 방식
         .addFilter(new JwtAuthenticationFilter(authenticationManager()))
