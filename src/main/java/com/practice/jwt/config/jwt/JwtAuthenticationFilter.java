@@ -24,12 +24,24 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
+// /login 요청을 해서 username, password 전송하면 (post)
+// UsernamePasswordAuthenticationFilter가 동작을 한다.
+// 하지만 SecurityConfig에서 formLogin().disable() 설정을 했기 때문에 동작을 안한다.
+// 이 필터가 동작하게끔 하고 싶으면 SecurityConfig에 .addFilter(new JwtAuthenticationFilter())를 해주면 된다
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+  // UsernamePasswordAuthenticationFilter는 로그인을 진행하는 필터이기 때문에 AuthenticationManager를 통해 로그인 진행
   private final AuthenticationManager authenticationManager;
 
-  @Override
+
+  // /login 요청을 하면 로그인 시도를 위해 실행되는 함수
+  // 1. username, password 받는다
+  // 2. 정상인지 로그인 시도를 해본다. authenticationManager로 로그인 시도를 하면
+  // PrincipalDetailsService가 호출된다. 그러면 loadUserByUsername() 함수 실행된다
+  // 3. PrincipalDetails를 세션에 담는다 (권한 관리를 위해서)
+  // 4. JWT 토큰을 만들어서 응답해주면 된다
+ @Override
   public Authentication attemptAuthentication(HttpServletRequest request,
       HttpServletResponse response) throws AuthenticationException {
     System.out.println("JwtAuthenticationFilter : 로그인 시도 중");
