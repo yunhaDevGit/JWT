@@ -93,16 +93,36 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
       FilterChain chain, Authentication authResult) throws IOException, ServletException {
+
     System.out.println("successfulAuthentication 실행됨 -> 인증이 완료됨");
     PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
+    // JWT 라이브러리를 사용하여 토큰 생성
+    // RSA 방식이 아닌 Hash 암호 방식
     String jwtToken = JWT.create()
         .withSubject("yunha token")
-        .withExpiresAt(new Date(System.currentTimeMillis()+ EXPIRATION_TIME))
-        .withClaim("id", principalDetails.getUser().getId())
+        .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // 토큰 유효시간
+        .withClaim("id", principalDetails.getUser().getId()) // withClaim - 내가 넣고 싶은 key-value 값
         .withClaim("username", principalDetails.getUser().getUsername())
         .sign(Algorithm.HMAC512(SECRETE));
 
-    response.addHeader(HEADER_STRING,TOKEN_PREFIX + jwtToken);
+    // 사용자에게 응답할 response의 header에 토큰 넣어준다다
+   response.addHeader(HEADER_STRING,TOKEN_PREFIX + jwtToken);
   }
 }
+
+
+// username, password -> 로그인 정상
+// 서버쪽 세션 ID 생성
+// 클라이언트 쿠키 세션 ID를 응답
+// 요청할 때마다 쿠키값 세션 ID를 항상 들고 서버쪽로 요청하기 때문에
+// 서버는 세션 ID가 유효한지 판단해서 유효하면 인증이 필요한 페이지로 접근하게 하면 된다
+// session.getAttribute("세션 값") 을 통해 유효성 검사
+
+// ---------------------------------------------
+
+// username, password -> 로그인 정상
+// JWT 토큰 생성
+// 클라이언트 쪽으로 JWT 토큰 응답
+// 요청할 때마다 JWT 토큰 가지고 요청
+// 서버는 JWT 토큰이 유효한지를 판단(필터를 통해)
