@@ -18,7 +18,7 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity // 기본적인 WebSecurity를 활성화 한다.
-@RequiredArgsConstructor
+@RequiredArgsConstructor // final 필드나 @NonNull이 붙은 필드에 대해 생성자 생성
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final CorsFilter corsFilter;
