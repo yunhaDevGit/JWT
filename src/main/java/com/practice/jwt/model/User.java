@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Data
-@Entity
+@Entity // database table과 1대 1로 매핑된다
 @Table(name = "user")
 public class User {
 

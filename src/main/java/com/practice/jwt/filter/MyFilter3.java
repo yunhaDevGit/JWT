@@ -27,7 +27,8 @@ public class MyFilter3 implements Filter {
       String headerAut = req.getHeader(HEADER_STRING);
       System.out.println("필터3");
 
-      // cors 라는 값으로 토큰이 넘어오면 filter를 타게끔
+      // 토큰을 만들었다고 가정 (토큰 : cos)
+      // cos 라는 값으로 토큰이 넘어오면 filter를 타게끔
       // id, password가 정상적으로 들어와서 로그인이 완료되면 토큰을 만들어주고 그걸 응답해준다
       // 요청할 때마다 header에 Authorization에 value 값으로 토큰을 가지고 온다
       // 그 때 토큰이 넘어오면 이 토큰이 내가 만든 토큰이 맞는지 검증만 하면 된다.

@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity // 기본적인 WebSecurity를 활성화 한다.
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
 
     // BasicAuthenticationFilter가 실행되기 전에 MyFilter3를 실행한다
-    //http.addFilterBefore(new MyFilter3(), BasicAuthenticationFilter.class);
+    // http.addFilterBefore(new MyFilter3(), BasicAuthenticationFilter.class);
     // 만약 직접 정의한 filter가 securityFilterChain을 먼저 실행시키고 싶을 경우
     // http.addFilterBefore(new MyFilter3(), SecurityContextPersistenceFilter.class);
     // SecurityContextPersistenceFilter가 securityFilterChain에서 가장 먼저 실행된다.
